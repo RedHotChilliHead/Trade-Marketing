@@ -1,0 +1,13 @@
+version: "3.10"
+
+services:
+  trade_marketingapp:
+    build:
+      dockerfile: ./Dockerfile
+    command:
+      - "python"
+      - "manage.py"
+      - "runserver"
+      - "0.0.0.0:8080"
+    ports:
+      - "8000:8080"
