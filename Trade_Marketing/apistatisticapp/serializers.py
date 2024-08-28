@@ -1,6 +1,7 @@
 from .models import Event
 from rest_framework import serializers
 
+
 class EventSerializer(serializers.Serializer):
     date = serializers.DateField()
     views = serializers.IntegerField()

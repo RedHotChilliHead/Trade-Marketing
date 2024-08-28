@@ -1,8 +1,10 @@
 # Trade Marketing
 
-Тестовое задание для стажёра Backend в команду Trade Marketing.
-Нужно разработать микросервис для счетчиков статистики. Сервис должен уметь взаимодействовать с клиентом при помощи REST API или JSON RPC запросов.
-Также нужно реализовать валидацию входных данных.
+## Описание
+Trade Marketing — это микросервис для сбора и анализа статистики маркетинговых показателей. 
+Сервис предоставляет REST API для работы со статистикой кликов и показов, 
+а также для расчета средней стоимости клика (CPC) и средней стоимости 1000 показов (CPM). 
+Входные данные всех методов проходят валидацию, чтобы обеспечить корректность и целостность данных.
 
 ## Методы API
 
@@ -10,14 +12,19 @@
 
 #### Описание
 
-Метод сохранения статистики за определенную дату.
+Метод позволяет сохранять статистику за конкретную дату.
+
+#### Эндпоинт
+```http
+POST /statistic/
+```
 
 #### URL
-
-`POST /statistic/`
+```http
+http://127.0.0.1:8000/statistic/
+```
 
 #### Параметры запроса
-
 - обязательные параметры:
   - `date` (дата события, формат: `YYYY-MM-DD`)
 - не обязательные параметры:
@@ -26,9 +33,8 @@
   - `cost` (стоимость кликов)
 
 #### Пример запроса
-
 ```http
-POST statistic/
+POST
 Content-Type: application/json
 {
     "date": "2024-01-01",
@@ -37,15 +43,35 @@ Content-Type: application/json
     "cost": 20.00
 }
 ```
+
+#### Пример ответа
+```http
+HTTP 201 Created
+Allow: GET, POST, DELETE, HEAD, OPTIONS
+Content-Type: application/json
+Vary: Accept
+
+{
+    "OK": "Statistics are saved"
+}
+```
+
 ### Метод получения статистики
 
 #### Описание
 
-Метод получения статистики по указанному диапазону дат.
+Метод позволяет получить статистику по указанному диапазону дат.
+Статистика агрегируется по дате.
+
+#### Эндпоинт
+```http
+GET /statistic/
+```
 
 #### URL
-
-`GET /statistic/`
+```http
+http://127.0.0.1:8000/statistic/
+```
 
 #### Параметры запроса
 
@@ -58,22 +84,38 @@ Content-Type: application/json
 #### Пример запроса
 
 ```http
-GET /statistic/?from=2024-07-01&to=2024-07-04&ordering=-views
+GET http://127.0.0.1:8000/statistic/?from=2024-07-01&to=2024-07-04&ordering=-views
 ```
 
 #### Пример ответа
-```
-{
-        "date": "2024-07-01",
+```http
+HTTP 200 OK
+Allow: GET, POST, DELETE, HEAD, OPTIONS
+Content-Type: application/json
+Vary: Accept
+
+[
+    {
+        "date": "2024-08-04",
+        "views": 20,
+        "clicks": 30,
+        "cost": "0.50",
+        "cpc": 0.02,
+        "cpm": 25.0
+    },
+    {
+        "date": "2024-07-04",
         "views": 10,
         "clicks": 10,
         "cost": "0.10",
         "cpc": 0.01,
         "cpm": 10.0
     }
+]
 ```
-, где cpc = cost/clicks (средняя стоимость клика),
-cpm = cost/views * 1000 (средняя стоимость 1000 показов)
+Где:
+-  cpc = cost/clicks (средняя стоимость клика)
+- cpm = cost/views * 1000 (средняя стоимость 1000 показов)
 
 ### Метод сброса статистики
 
@@ -81,9 +123,16 @@ cpm = cost/views * 1000 (средняя стоимость 1000 показов)
 
 Удаляет всю сохраненную статистику.
 
-#### URL
+#### Эндпоинт
 
-`DELETE /statistic/`
+```http
+DELETE /statistic/
+```
+
+#### URL
+```http
+http://127.0.0.1:8000/statistic/
+```
 
 #### Пример запроса
 
@@ -91,23 +140,53 @@ cpm = cost/views * 1000 (средняя стоимость 1000 показов)
 DELETE /statistic/
 ```
 
+### Пример ответа
+
+```http
+HTTP 204 No Content
+Allow: GET, POST, DELETE, HEAD, OPTIONS
+Content-Type: application/json
+Vary: Accept
+
+{
+    "OK": "Statistics are deleted"
+}
+```
+
+### Предварительные требования
+
+- Убедитесь, что у вас установлены Docker и Docker Compose
+- Версия Python: 3.11
+
+### Шаги установки
+
+1. Клонируйте репозиторий проекта:
+
+```sh
+git clone https://github.com/RedHotChilliHead/Trade-Marketing.git
+cd Trade-Marketing
+```
+
+2. Установите зависимости:
+```sh
+pip install -r requirements.txt
+```
+
+3. Соберите и запустите Docker-контейнеры:
+```sh
+docker compose up -d
+```
+
+4. Выполните миграции
+```sh
+docker compose run trade_marketingapp python manage.py migrate
+```
+После выполнения всех шагов приложение будет доступно по адресу: http://localhost:8000
+
 ## Unit-тесты
 
-#### Пример запуска
+Для запуска юнит-тестов используйте следующую команду:
 
+```sh
+docker compose run trade_marketingapp python manage.py test
 ```
-python manage.py test apistatisticapp.tests.EventTestCase
-```
-
-## Инструкция по запуску приложения
-
-#### Пример запуска
-Перейдите в директорию проекта:
-``` 
-cd /path/to/Trade_Marketing
-```
-Соберите и запустите контейнер:
-``` 
-docker-compose up --build trade_marketingapp
-```
-Приложение будет доступно по адресу ```http://localhost:8000```

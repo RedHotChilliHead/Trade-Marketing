@@ -5,7 +5,7 @@ from django.urls import reverse
 from .models import Event
 
 
-class EventTestCase(APITestCase):  # python manage.py test apistatisticapp.tests.EventTestCase
+class EventTestCase(APITestCase):
     def setUp(self):
         self.event = Event.objects.create(date="2024-07-04", views=10, clicks=20, cost=1)
 

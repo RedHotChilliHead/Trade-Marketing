@@ -44,7 +44,7 @@ class EventApiView(APIView):
 
         serializer = EventSerializer(queryset, many=True)
         serializer_data = sorted(serializer.data, key=lambda p: p[ordering], reverse=reverse)
-        return Response(serializer_data)
+        return Response(serializer_data, status=status.HTTP_200_OK)
 
     def post(self, request: Request) -> Response:
         """
@@ -55,7 +55,7 @@ class EventApiView(APIView):
         serializer = EventSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(status=status.HTTP_201_CREATED)
+        return Response(data={"OK": "Statistics are saved"}, status=status.HTTP_201_CREATED)
 
     def delete(self, request: Request) -> Response:
         """
@@ -63,4 +63,4 @@ class EventApiView(APIView):
         Удаляет всю сохраненную статистику.
         """
         Event.objects.all().delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(data={"OK": "Statistics are deleted"}, status=status.HTTP_204_NO_CONTENT)
