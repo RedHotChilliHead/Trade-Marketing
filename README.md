@@ -20,7 +20,7 @@ POST /statistic/
 ```
 
 #### URL
-```http
+```
 http://127.0.0.1:8000/statistic/
 ```
 
@@ -45,7 +45,7 @@ Content-Type: application/json
 ```
 
 #### Пример ответа
-```http
+```
 HTTP 201 Created
 Allow: GET, POST, DELETE, HEAD, OPTIONS
 Content-Type: application/json
@@ -69,7 +69,7 @@ GET /statistic/
 ```
 
 #### URL
-```http
+```
 http://127.0.0.1:8000/statistic/
 ```
 
@@ -88,7 +88,7 @@ GET http://127.0.0.1:8000/statistic/?from=2024-07-01&to=2024-07-04&ordering=-vie
 ```
 
 #### Пример ответа
-```http
+```
 HTTP 200 OK
 Allow: GET, POST, DELETE, HEAD, OPTIONS
 Content-Type: application/json
@@ -130,7 +130,7 @@ DELETE /statistic/
 ```
 
 #### URL
-```http
+```
 http://127.0.0.1:8000/statistic/
 ```
 
@@ -142,7 +142,7 @@ DELETE /statistic/
 
 ### Пример ответа
 
-```http
+```
 HTTP 204 No Content
 Allow: GET, POST, DELETE, HEAD, OPTIONS
 Content-Type: application/json
